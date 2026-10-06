@@ -237,7 +237,10 @@ def render_markdown(meta: dict, summary: dict, buckets: dict, ticket: str | None
             for r in rows:
                 rule_num = r.get("rule_number", "—")
                 name = r.get("name", "—")
-                rec = r.get("recommendations", "")
+                rec = r.get("recommendations") or ""
+                # pandas NaN shows up as float; coerce to empty string
+                if not isinstance(rec, str):
+                    rec = ""
                 lines.append(f"**{rule_num} — {name}**  ")
                 if rec:
                     lines.append(f"{rec}  ")
